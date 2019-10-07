@@ -26,6 +26,8 @@ CScene1::CScene1()
 	pTexture->CreateTextureLinear(1, "../Scene1/churchwall2.bmp");
 	pTexture->CreateTextureLinear(2, "../Scene1/churchwall2a.bmp");
 	pTexture->CreateTextureLinear(3, "../Scene1/grey.bmp");
+	pTexture->CreateTextureLinear(4, "../Scene1/ext_graystone.bmp");
+	pTexture->CreateTextureLinear(5, "../Scene1/water.bmp");
 
 
 	// Cria o Timer
@@ -142,17 +144,21 @@ int CScene1::DrawGLScene(void)	// Função que desenha a cena
 	glEnable(GL_TEXTURE_2D);
 	glColor3f(1.0, 1.0, 1.0); // Define a cor atual
 
-	// Desenha o gramado
+	// Desenha o chão central (rocha)
+	DrawCube(0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 200.0f, 5.0f, 200.0f, 4);
+	
+	// Desenha o "rio" que circunda a rocha base do castelo
 	glPushMatrix();
-	pTexture->ApplyTexture(0); // Define a textura atual
+	pTexture->ApplyTexture(5);
 	glBegin(GL_QUADS);
 		glNormal3f(0.0f, 1.0f, 0.0f);
-		glTexCoord2d(0.0f, 0.0f); glVertex3f(-200.0f, 0.0f, 200.0f);
-		glTexCoord2d(2.0f, 0.0f); glVertex3f( 200.0f, 0.0f,  200.0f);
-		glTexCoord2d(2.0f, 2.0f); glVertex3f( 200.0f, 0.0f, -200.0f);
-		glTexCoord2d(0.0f, 2.0f); glVertex3f(-200.0f, 0.0f, -200.0f);
+		glTexCoord2d(0.0f, 0.0f);	glVertex3f(-150.0f,		-4.2f,		150.0f);
+		glTexCoord2d(10.0f, 0.0f);	glVertex3f(150.0f,		-4.2f,		150.0f);
+		glTexCoord2d(10.0f, 10.0f); glVertex3f(150.0f,		-4.2f,		-150.0f);
+		glTexCoord2d(0.0f, 10.0f);	glVertex3f(-150.0f,		-4.2f,		-150.0f);
 	glEnd();
-	glPopMatrix();					
+	glPopMatrix();
+
 
 	DrawTower(75, 75);
 	DrawTower(75, -75);
@@ -848,3 +854,4 @@ void CScene1::DrawFrontWall()
 	glEnd();
 	glPopMatrix();
 }
+
