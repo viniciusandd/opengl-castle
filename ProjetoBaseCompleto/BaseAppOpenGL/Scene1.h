@@ -58,6 +58,10 @@ public:
 	void DrawSideWall(int x, int z);
 	void DrawFrontWall();
 
+	void DrawGarden();
+	void DrawTrees();
+	void BuildTree(float fPosX, float fPosY, float fPosZ, float fScaleX, float fScaleY, float fScaleZ);
+
 	//void CreateSkyBox(float x, float y, float z, float width, float height, float length);
 
 private:

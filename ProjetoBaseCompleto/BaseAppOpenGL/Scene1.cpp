@@ -26,6 +26,8 @@ CScene1::CScene1()
 	pTexture->CreateTextureLinear(1, "../Scene1/churchwall2.bmp");
 	pTexture->CreateTextureLinear(2, "../Scene1/churchwall2a.bmp");
 	pTexture->CreateTextureLinear(3, "../Scene1/grey.bmp");
+	pTexture->CreateTextureLinear(4, "../Scene1/ext_graystone.bmp");
+	pTexture->CreateTextureLinear(5, "../Scene1/water.bmp");
 
 
 	// Cria o Timer
@@ -142,17 +144,31 @@ int CScene1::DrawGLScene(void)	// Função que desenha a cena
 	glEnable(GL_TEXTURE_2D);
 	glColor3f(1.0, 1.0, 1.0); // Define a cor atual
 
-	// Desenha o gramado
+	// Desenha o chão central (rocha)
+	DrawCube(0.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 200.0f, 5.0f, 200.0f, 4);
+	
+	// Desenha o "rio" que circunda a rocha base do castelo
 	glPushMatrix();
-	pTexture->ApplyTexture(0); // Define a textura atual
+	pTexture->ApplyTexture(5);
 	glBegin(GL_QUADS);
 		glNormal3f(0.0f, 1.0f, 0.0f);
-		glTexCoord2d(0.0f, 0.0f); glVertex3f(-200.0f, 0.0f, 200.0f);
-		glTexCoord2d(2.0f, 0.0f); glVertex3f( 200.0f, 0.0f,  200.0f);
-		glTexCoord2d(2.0f, 2.0f); glVertex3f( 200.0f, 0.0f, -200.0f);
-		glTexCoord2d(0.0f, 2.0f); glVertex3f(-200.0f, 0.0f, -200.0f);
+		glTexCoord2d(0.0f, 0.0f);	glVertex3f(-150.0f,		-4.2f,		150.0f);
+		glTexCoord2d(10.0f, 0.0f);	glVertex3f(150.0f,		-4.2f,		150.0f);
+		glTexCoord2d(10.0f, 10.0f); glVertex3f(150.0f,		-4.2f,		-150.0f);
+		glTexCoord2d(0.0f, 10.0f);	glVertex3f(-150.0f,		-4.2f,		-150.0f);
 	glEnd();
-	glPopMatrix();					
+	glPopMatrix();
+
+	/** 
+	* "Jardim"
+	*/
+
+	// Desenha a grama que circunda o rio
+	DrawGarden();
+
+	// Desenha as árvores
+	DrawTrees();
+
 
 	DrawTower(75, 75);
 	DrawTower(75, -75);
@@ -161,6 +177,7 @@ int CScene1::DrawGLScene(void)	// Função que desenha a cena
 
 	DrawSideWall(80, 59);
 	DrawSideWall(-70, 59);
+
 
 	/**
 	* Encapsulei em um PushMatriz pra poder movimentar e rotacionar
@@ -846,5 +863,114 @@ void CScene1::DrawFrontWall()
 		glTexCoord2f(3, 0.3); glVertex3f(60, 59, 70);
 		glTexCoord2f(0, 0.3); glVertex3f(-60, 59, 70);
 	glEnd();
+	glPopMatrix();
+}
+
+void CScene1::DrawGarden()
+{
+	glColor3f(1.0, 1.0, 1.0); // Define a cor atual
+
+	// Desenha a parte esquerda da grama
+	DrawCube(
+		-230.0f, -1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f,
+		200.0f, 5.0f, 300.0f,
+	0);
+
+	// Desenha a parte frontal (com base na vista frontal ao castelo) da grama
+	DrawCube(
+		0.0f, -1.0f, 170.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f,
+		660.0f, 5.0f, 40.0f,
+	0);
+
+	// Desenha a parte direita da grama
+	DrawCube(
+		230.0f, -1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f,
+		200.0f, 5.0f, 300.0f,
+	0);
+
+	// Desenha a parte de trás (com base na vista frontal ao castelo) da grama
+	DrawCube(
+		0.0f, -1.0f, -170.0f,
+		0.0f, 0.0f, 0.0f,
+		0.0f,
+		660.0f, 5.0f, 40.0f,
+	0);
+}
+
+void CScene1::DrawTrees()
+{
+	// Obs.: utilizar valores de escala entre 1.0f e 2.0f
+	float fY = 18.5f;
+
+	// Esquerda
+	CScene1::BuildTree(-170.0f, fY, 60.0f,		1.0f, 1.0f, 1.0f);
+	CScene1::BuildTree(-195.0f, fY, -20.0f,		1.2f, 1.2f, 1.2f);
+	CScene1::BuildTree(-240.0f, fY, -60.0f,		1.4f, 1.4f, 1.4f);
+	CScene1::BuildTree(-200.0f, fY, 50.0f,		1.6f, 1.6f, 1.6f);
+	CScene1::BuildTree(-250.0f, fY, 30.0f,		1.8f, 1.8f, 1.8f);
+	CScene1::BuildTree(-260.0f, fY, 110.0f,		2.0f, 2.0f, 2.0f);
+	CScene1::BuildTree(-190.0f, fY, 150.0f,		2.0f, 2.0f, 2.0f);
+	CScene1::BuildTree(-230.0f, fY, 100.0f,		1.6f, 1.6f, 1.6f);
+	CScene1::BuildTree(-210.0f, fY, -150.0f,	1.8f, 1.8f, 1.8f);
+
+	
+	// Direita
+	CScene1::BuildTree(170.0f, fY, 60.0f, 1.0f, 1.0f, 1.0f);
+	CScene1::BuildTree(195.0f, fY, -20.0f, 1.2f, 1.2f, 1.2f);
+	CScene1::BuildTree(240.0f, fY, -60.0f, 1.4f, 1.4f, 1.4f);
+	CScene1::BuildTree(200.0f, fY, 50.0f, 1.6f, 1.6f, 1.6f);
+	CScene1::BuildTree(250.0f, fY, 30.0f, 1.8f, 1.8f, 1.8f);
+	CScene1::BuildTree(260.0f, fY, 110.0f, 2.0f, 2.0f, 2.0f);
+	CScene1::BuildTree(190.0f, fY, 150.0f, 2.0f, 2.0f, 2.0f);
+	CScene1::BuildTree(230.0f, fY, 100.0f, 1.6f, 1.6f, 1.6f);
+	CScene1::BuildTree(210.0f, fY, -150.0f, 1.8f, 1.8f, 1.8f);
+
+
+}
+
+void CScene1::BuildTree(float fPosX, float fPosY, float fPosZ, float fScaleX, float fScaleY, float fScaleZ)
+{
+	// Desenha o caule (árvore)
+	glPushMatrix();
+		glTranslatef(fPosX, fPosY, fPosZ);
+		glScalef(fScaleX, fScaleY, fScaleZ);
+
+		glColor3ub(128, 64, 0);			// Marrom
+		auxSolidCylinder(1.2f, 18.0f);	// Diâmetro e Altura
+	glPopMatrix();
+
+
+	// Desenha a copa base (árvore)
+	glPushMatrix();
+		glTranslatef(fPosX, fPosY + 1.0f, fPosZ);
+		glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);	// Coloca 1 no eixo que deseja rotacionar
+		glScalef(fScaleX, fScaleY, fScaleZ);
+
+		glColor3ub(0, 179, 0);					// Verde Claro
+		auxSolidCone(8.0f, 16.0f);				// Raio e Altura
+	glPopMatrix();
+
+
+	// Desenha a copa do topo (árvore)
+	glPushMatrix();
+		if (fScaleY >= 1.5f) 
+		{
+			glTranslatef(fPosX, fPosY + 20.0f, fPosZ);
+		}
+		else {
+			glTranslatef(fPosX, fPosY + 10.0f, fPosZ);
+		}
+		
+		glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);	// Coloca 1 no eixo que deseja rotacionar
+		glScalef(fScaleX, fScaleY, fScaleZ);
+
+		glColor3ub(0, 179, 0);					// Verde Claro
+		auxSolidCone(5.0f, 10.0f);				// Raio e Altura
 	glPopMatrix();
 }
